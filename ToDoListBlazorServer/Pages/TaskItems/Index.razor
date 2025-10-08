@@ -1,0 +1,46 @@
+﻿@page "/tasks"
+@inject TaskService _taskService
+
+<h1>Minhas Tarefas</h1>
+
+<table class="table">
+  <thead>
+      <tr>
+            <th>#</th>
+            <th>Título</th>
+            <th>Descrição</th>
+            <th>Status</th>
+            <th>Data</th>
+      </tr>
+    </thead>
+      <tbody>
+          @foreach (var task in taskItems)
+            {
+                <tr>
+                    <td>@task.Id</td>
+                    <td>@task.Title</td>
+                    <td>@task.Description</td>
+                    <td>@task.IsCompleted</td>
+                    <td>@task.CreatedAt</td>
+                    <td>
+                        <a href="#">EDITAR</a>
+                        <a href="#">REMOVER</a>
+                        <a href="#">CONCLUÍR</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+  
+</table>
+
+
+
+@code {
+    private List<TaskItem> taskItems = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        taskItems = await _taskService.GetAllAsync();
+    }
+
+}

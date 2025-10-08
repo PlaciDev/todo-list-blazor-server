@@ -1,0 +1,63 @@
+﻿@page "/tasks/create"
+@inject TaskService _taskService
+@inject NavigationManager _navigationManager
+
+<h3>Nova Tarefa</h3>
+
+<EditForm Model = "_model" OnValidSubmit="@HandleSubmitAsync">
+
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+
+    <div class="mb-3">
+        <label for="Title" class="forma-label">Título</label>
+        <InputText class="form-control"
+                    typeof="text"
+                    id="Title"
+                    @bind-Value="_model.Title" />
+    </div>
+    <div class="mb-3">
+        <label for="Title" class="forma-label">Descrição</label>
+        <InputText class="form-control"
+                   typeof="text"
+                   id="Description"
+                   @bind-Value="_model.Description" />
+    </div>
+
+    @if (!string.IsNullOrEmpty(_errorMessage))
+    {
+        <div class=" alert-danger" role="alert">
+            @_errorMessage
+        </div>
+    }
+
+    <button class="btn btn-success" type="submit">
+        Registrar
+    </button>
+
+
+</EditForm>
+
+
+
+
+
+@code {
+    private TaskItem _model = new();
+    private string? _errorMessage = null;
+
+    private async Task HandleSubmitAsync()
+    {
+        try
+        {
+            await _taskService.AddAsync(_model);
+            _navigationManager.NavigateTo("/tasks");
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = ex.Message;
+        }
+
+    }
+
+}

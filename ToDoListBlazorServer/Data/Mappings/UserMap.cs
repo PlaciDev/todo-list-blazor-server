@@ -17,16 +17,19 @@ namespace ToDoListBlazorServer.Data.Mappings
 
             builder.Property(x => x.Name)
                 .IsRequired()
+                .HasColumnName("Name")
                 .HasColumnType("NVARCHAR")
                 .HasMaxLength(50);
 
             builder.Property(x => x.Email)
                 .IsRequired()
+                .HasColumnName("Email")
                 .HasColumnType("NVARCHAR")
                 .HasMaxLength(100);
 
             builder.Property(x => x.PasswordHash)
                 .IsRequired()
+                .HasColumnName("PasswordHash")
                 .HasColumnType("NVARCHAR")
                 .HasMaxLength(255);
 

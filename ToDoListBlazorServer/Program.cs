@@ -2,12 +2,17 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
 using ToDoListBlazorServer.Data;
+using ToDoListBlazorServer.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+
+// Injeção de dependência do serviço TaskService
+
+builder.Services.AddScoped<TaskService>();
 
 // Confuguração do Entity Framework Core com SQL Server
 

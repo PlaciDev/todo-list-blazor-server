@@ -426,3 +426,6 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# Ignora arquivos de configuracao sensiveis, como o de desenvolvimento
+appsettings.Development.json

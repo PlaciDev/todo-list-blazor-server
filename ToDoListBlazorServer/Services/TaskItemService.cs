@@ -5,12 +5,12 @@ using ToDoListBlazorServer.Models;
 
 namespace ToDoListBlazorServer.Services
 {
-    public class TaskService
+    public class TaskItemService
     {
 
         private readonly AppDbContext _context;
 
-        public TaskService(AppDbContext context)
+        public TaskItemService(AppDbContext context)
         {
             _context = context;
         }
@@ -25,6 +25,14 @@ namespace ToDoListBlazorServer.Services
 
         }
 
+        public async Task<TaskItem?> GetByIdAsync(int id)
+        {
+            return await _context
+                .TaskItems
+                .FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+
         public async Task AddAsync(TaskItem model)
         {
             model.CreatedAt = DateTime.UtcNow;
@@ -38,6 +46,7 @@ namespace ToDoListBlazorServer.Services
 
         public async Task EditAsync(TaskItem model)
         {
+            
             _context.TaskItems.Update(model);
             await _context.SaveChangesAsync();
         }
@@ -47,7 +56,7 @@ namespace ToDoListBlazorServer.Services
 
             var task = await _context.TaskItems.FirstOrDefaultAsync(x => x.Id == id);
 
-            _context.Remove(task);
+             _context.Remove(task);
             await _context.SaveChangesAsync();
 
         }

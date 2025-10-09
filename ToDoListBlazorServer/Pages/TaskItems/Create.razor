@@ -1,5 +1,5 @@
 ﻿@page "/tasks/create"
-@inject TaskService _taskService
+@inject TaskItemService _taskItemService
 @inject NavigationManager _navigationManager
 
 <h3>Nova Tarefa</h3>
@@ -50,7 +50,7 @@
     {
         try
         {
-            await _taskService.AddAsync(_model);
+            await _taskItemService.AddAsync(_model);
             _navigationManager.NavigateTo("/tasks");
         }
         catch (Exception ex)

@@ -1,0 +1,80 @@
+﻿@page "/tasks/edit/{id:int}"
+
+@inject TaskItemService _taskItemService
+@inject NavigationManager _navigationManager
+
+<h1>@_model?.Title</h1>
+
+<EditForm Model="@_model" OnValidSubmit="@HandleSubmitAsync">
+    
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+
+    <div class="mb-3">
+
+        <label for="Title" class="form-label">Título</label>
+        <InputText class="form-control" id="Title" @bind-Value=_model.Title/>
+        
+
+    </div>
+
+    <div class="mb-3">
+        <label for="Description" class="form-label">Descrição</label>
+        <InputTextArea class="form-control" id="Description" @bind-Value=_model.Description />
+    </div>
+
+    @if(!string.IsNullOrEmpty(_errorMessage))
+    {
+        <div class="alert-danger" role="alert">
+            @_errorMessage
+        </div>
+    }
+    
+
+    <button class="btn btn-success" type="submit">
+        Salvar
+    </button>
+
+</EditForm>
+
+@code {
+
+    [Parameter]
+    public int id { get; set; }
+
+    private TaskItem _model = new();
+    private string? _errorMessage = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _model = await _taskItemService.GetByIdAsync(id);
+
+
+    }
+
+    private async Task HandleSubmitAsync()
+    {
+        try
+        {
+            var task = await _taskItemService.GetByIdAsync(id);
+            if (task is null)
+            {
+                throw new Exception("Tarefa não encontrada");
+            }
+
+            task.Title = _model.Title;
+            task.Description = _model.Description;
+
+            await _taskItemService.EditAsync(task);
+
+            _navigationManager.NavigateTo("/tasks");
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = ex.Message;
+           
+        }
+    }
+
+
+}

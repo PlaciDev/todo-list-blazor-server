@@ -12,7 +12,7 @@ builder.Services.AddServerSideBlazor();
 
 // Injeção de dependência do serviço TaskService
 
-builder.Services.AddScoped<TaskService>();
+builder.Services.AddScoped<TaskItemService>();
 
 // Confuguração do Entity Framework Core com SQL Server
 

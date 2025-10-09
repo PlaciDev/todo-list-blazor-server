@@ -51,10 +51,10 @@ namespace ToDoListBlazorServer.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(TaskItem model)
         {
 
-            var task = await _context.TaskItems.FirstOrDefaultAsync(x => x.Id == id);
+            var task = await _context.TaskItems.FirstOrDefaultAsync(x => x.Id == model.Id);
 
              _context.Remove(task);
             await _context.SaveChangesAsync();

@@ -1,0 +1,54 @@
+﻿@page "/tasks/delete/{id:int}"
+
+@inject TaskItemService _taskItemService
+@inject NavigationManager _navigationManager
+
+<h3>@_model?.Title</h3>
+
+<EditForm Model="@_model" OnValidSubmit="HandleSubmitAsync">
+
+    <div class="mb-3">
+        <label for="Title" class="form-label">Título</label>
+        <InputText readonly class="form-control" id="Title" @bind-Value=_model.Title />
+    </div>
+
+    <div class="mb-3">
+        <label for="Description" class="form-label">Description</label>
+        <InputText readonly class="form-control" id="Description" @bind-Value=_model.Description />
+
+    </div>
+
+    <button class="btn btn-success">
+        Remover
+    </button>
+
+</EditForm>
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    private TaskItem? _model = new();
+    private string? _errorMessage = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _model = await _taskItemService.GetByIdAsync(id);
+    }
+
+    private async Task HandleSubmitAsync()
+    {
+        try
+        {
+            var task = await _taskItemService.GetByIdAsync(id);
+
+            await _taskItemService.DeleteAsync(task);
+        }
+        catch (Exception ex)
+        {
+
+            _errorMessage = ex.Message;
+        }
+
+    }
+}

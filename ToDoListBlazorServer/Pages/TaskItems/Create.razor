@@ -11,17 +11,11 @@
 
     <div class="mb-3">
         <label for="Title" class="forma-label">Título</label>
-        <InputText class="form-control"
-                    typeof="text"
-                    id="Title"
-                    @bind-Value="_model.Title" />
+        <InputText class="form-control" id="Title" @bind-Value="_model.Title" />
     </div>
     <div class="mb-3">
         <label for="Title" class="forma-label">Descrição</label>
-        <InputText class="form-control"
-                   typeof="text"
-                   id="Description"
-                   @bind-Value="_model.Description" />
+        <InputText class="form-control"id="Description" @bind-Value="_model.Description" />
     </div>
 
     @if (!string.IsNullOrEmpty(_errorMessage))

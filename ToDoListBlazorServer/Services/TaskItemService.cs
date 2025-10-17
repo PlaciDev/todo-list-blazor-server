@@ -15,10 +15,11 @@ namespace ToDoListBlazorServer.Services
             _context = context;
         }
 
-        public async Task<List<TaskItem>> GetAllAsync()
+        public async Task<List<TaskItem>> GetAllAsync(int userId)
         {
             return await _context
                 .TaskItems
+                .Where(x => x.UserId == userId)
                 .AsNoTracking()
                 .ToListAsync();
 
@@ -33,12 +34,12 @@ namespace ToDoListBlazorServer.Services
         }
 
 
-        public async Task AddAsync(TaskItem model)
+        public async Task AddAsync(TaskItem model, int userId)
         {
             model.CreatedAt = DateTime.UtcNow;
             model.IsCompleted = false;
 
-            model.UserId = 1;
+            model.UserId = userId;
 
             await _context.TaskItems.AddAsync(model);
             await _context.SaveChangesAsync();
@@ -54,11 +55,21 @@ namespace ToDoListBlazorServer.Services
         public async Task DeleteAsync(TaskItem model)
         {
 
-            var task = await _context.TaskItems.FirstOrDefaultAsync(x => x.Id == model.Id);
+            var taskItem = await _context.TaskItems.FirstOrDefaultAsync(x => x.Id == model.Id);
 
-             _context.Remove(task);
+             _context.Remove(taskItem);
             await _context.SaveChangesAsync();
 
+        }
+
+        public async Task ToggleCompletionAsync(int id)
+        {
+            var taksItem = await _context.TaskItems.FirstOrDefaultAsync(x => x.Id == id);
+            if (taksItem != null)
+            {
+                taksItem.IsCompleted = !taksItem.IsCompleted;
+                await _context.SaveChangesAsync();
+            }
         }
 
        

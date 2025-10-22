@@ -1,6 +1,7 @@
 ﻿@page "/tasks/create"
 @inject TaskItemService _taskItemService
 @inject NavigationManager _navigationManager
+@attribute [Authorize]
 
 <h3>Nova Tarefa</h3>
 
@@ -37,20 +38,32 @@
 
 
 @code {
+    [CascadingParameter]
+    private Task<AuthenticationState> _authenticationState { get; set; }
     private TaskItem _model = new();
     private string? _errorMessage = null;
 
+
     private async Task HandleSubmitAsync()
     {
-        try
+
+        var authState = await _authenticationState;
+        var userIdString = authState.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var userId = 0;
+
+        if (int.TryParse(userIdString, out userId))
         {
-            await _taskItemService.AddAsync(_model);
+            await _taskItemService.AddAsync(_model, userId);
+            await Task.Delay(100);
             _navigationManager.NavigateTo("/tasks");
         }
-        catch (Exception ex)
+        else
         {
-            _errorMessage = ex.Message;
+            _errorMessage = "Usuário não autenticado";
         }
+
+        _navigationManager.NavigateTo("/tasks");
+
 
     }
 

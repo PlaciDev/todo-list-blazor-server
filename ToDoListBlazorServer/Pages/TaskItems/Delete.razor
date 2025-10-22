@@ -2,6 +2,8 @@
 
 @inject TaskItemService _taskItemService
 @inject NavigationManager _navigationManager
+@attribute [Authorize]
+
 
 <h3>@_model?.Title</h3>
 
@@ -49,6 +51,8 @@
 
             _errorMessage = ex.Message;
         }
+
+        _navigationManager.NavigateTo("/tasks");
 
     }
 }

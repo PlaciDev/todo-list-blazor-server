@@ -1,9 +1,12 @@
 ﻿@page "/tasks"
 @inject TaskItemService _taskService
+@attribute [Authorize]
 
 <h1>Minhas Tarefas</h1>
 
-<table class="table">
+<a class="btn btn-primary" href="/tasks/create">Nova Tarefa</a>
+
+<table class="table w-100">
   <thead>
       <tr>
             <th>#</th>
@@ -11,22 +14,32 @@
             <th>Descrição</th>
             <th>Status</th>
             <th>Data</th>
+            <th></th>
       </tr>
     </thead>
       <tbody>
-          @foreach (var task in taskItems)
+          @foreach (var task in _taskItems)
             {
                 <tr>
                     <td>@task.Id</td>
                     <td>@task.Title</td>
                     <td>@task.Description</td>
-                    <td>@task.IsCompleted</td>
+                    <td>@if (task.IsCompleted)
+                        {
+                            <span>Concluído</span>
+                        }
+                        else
+                        {
+                            <span>Pendente</span>
+                        }
+                    </td>
                     <td>@task.CreatedAt</td>
                     <td>
-                        <a href="#">EDITAR</a>
-                        <a href="#">REMOVER</a>
-                        <a href="#">CONCLUÍR</a>
+                        <a class="btn btn-outline-warning" href="/tasks/edit/@task.Id">EDITAR</a>
+                        <a class="btn btn-outline-danger" href="/tasks/delete/@task.Id">REMOVER</a>
+                        <a class="btn btn-outline-success" href="" @onclick="() => ToggleCompletion(task.Id)"@onclick:preventDefault>CONCLUIR</a>
                     </td>
+                        
                 </tr>
             }
             </tbody>
@@ -35,12 +48,44 @@
 
 
 
+
+
 @code {
-    private List<TaskItem> taskItems = new();
+    [CascadingParameter]
+    private Task<AuthenticationState> _authenticationState { get; set; }
+    private List<TaskItem> _taskItems = new();
+
 
     protected override async Task OnInitializedAsync()
     {
-        taskItems = await _taskService.GetAllAsync();
+        var authState = await _authenticationState;
+        var userIdString = authState.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var userIdInt = 0;
+
+
+
+        if (int.TryParse(userIdString, out userIdInt))
+        {
+            _taskItems = await _taskService.GetAllAsync(userIdInt);
+        }
+
+
+        
     }
 
+    private async Task ToggleCompletion(int id)
+    {
+        await _taskService.ToggleCompletionAsync(id);
+
+        var taskToUpdate = _taskItems.FirstOrDefault(x => x.Id == id);
+
+        if(_taskItems is not null)
+        {
+            taskToUpdate.IsCompleted = !taskToUpdate.IsCompleted;
+        }
+
+        StateHasChanged();
+    }
+
+    
 }

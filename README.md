@@ -29,10 +29,10 @@ Aplicação para gerenciamento de tarefas, densenvolvida com "Blazor Server".
 <img width="1903" height="961" alt="Captura de tela 2025-10-22 164111" src="https://github.com/user-attachments/assets/dd131d59-236c-49e3-9217-155367ae3183" />
 
 ### Criar Nova Tarefa
-...
+<img width="1885" height="948" alt="image" src="https://github.com/user-attachments/assets/101268f1-138d-4e4e-8a1c-9547f742a1b4" />
 
 ### Editar Tarefa
-...
+<img width="1896" height="958" alt="image" src="https://github.com/user-attachments/assets/e6d1b55d-f5dc-41dd-a5d6-42268c268414" />
 
 ### Remover Tarefa
-...
+<img width="1898" height="955" alt="image" src="https://github.com/user-attachments/assets/66d784c3-f5ff-40a1-b767-49870372794f" />
